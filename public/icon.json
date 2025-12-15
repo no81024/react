@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "icon": "/IMAGE/book.png",
+        "title": "Tư vấn hỗ trợ pháp lý",
+        "desc": "Tư vấn pháp luật cho doanh nghiệp"
+    },
+    {
+        "id": 2,
+        "icon": "/IMAGE/book.png",
+        "title": "Chương trình hỗ trợ",
+        "desc": "Hỗ trợ pháp lý cho doanh nghiệp"
+    },
+    {
+        "id": 3,
+        "icon": "/icons/legal-3.png",
+        "title": "CSDL pháp luật",
+        "desc": "Văn bản pháp luật"
+    },
+    {
+        "id": 4,
+        "icon": "/icons/legal-4.png",
+        "title": "Văn bản chính sách",
+        "desc": "Hệ thống văn bản mới"
+    },
+    {
+        "id": 5,
+        "icon": "/icons/legal-5.png",
+        "title": "Hỏi đáp pháp luật",
+        "desc": "Giải đáp thắc mắc"
+    },
+    {
+        "id": 6,
+        "icon": "/icons/legal-6.png",
+        "title": "Liên kết hữu ích",
+        "desc": "Các cổng thông tin"
+    },
+    {
+        "id": 7,
+        "icon": "/icons/legal-4.png",
+        "title": "Văn bản chính sách",
+        "desc": "Hệ thống văn bản mới"
+    },
+    {
+        "id": 8,
+        "icon": "/icons/legal-5.png",
+        "title": "Hỏi đáp pháp luật",
+        "desc": "Giải đáp thắc mắc"
+    },
+    {
+        "id": 9,
+        "icon": "/icons/legal-6.png",
+        "title": "Liên kết hữu ích",
+        "desc": "Các cổng thông tin"
+    }
+]

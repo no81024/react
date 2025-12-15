@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "label": "TIN TỨC - SỰ KIỆN",
+        "link": "/tin-tuc-su-kien"
+    },
+    {
+        "id": 2,
+        "label": "VĂN BẢN PHÁP LUẬT",
+        "link": "/van-ban-phap-luat"
+    },
+    {
+        "id": 3,
+        "label": "CHƯƠNG TRÌNH - KẾ HOẠCH",
+        "link": "/chuong-trinh-ke-hoach"
+    },
+    {
+        "id": 4,
+        "label": "TƯ VẤN VIÊN PHÁP LÝ",
+        "link": "/tu-van-vien-phap-ly"
+    },
+    {
+        "id": 5,
+        "label": "THỦ TỤC HÀNH CHÍNH",
+        "link": "/thu-tuc-hanh-chinh"
+    },
+    {
+        "id": 6,
+        "label": "NGHIÊN CỨU TRAO ĐỔI",
+        "link": "/nghien-cuu-trao-doi"
+    }
+]

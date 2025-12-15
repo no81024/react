@@ -1,0 +1,15 @@
+{
+    "featuredImage": "/IMAGE/image3.png",
+    "news": [
+        {
+            "id": 1,
+            "title": "Chỉ thị của Thủ tướng Chính phủ về thúc đẩy phát triển doanh nghiệp vừa và nhỏ",
+            "description": "Thủ tướng Chính phủ yêu cầu thực hiện quyết liệt mục tiêu phát triển doanh nghiệp nhỏ và vừa nhanh, bền vững, tăng trưởng về số lượng, chất lượng, quy mô, hiệu quả hoạt động và đóng góp quan trọng vào nền kinh tế. Phấn đấu từ nay đến năm 2030 có thêm ít nhất 1 triệu doanh nghiệp....."
+        },
+        {
+            "id": 2,
+            "title": "Thúc đẩy hoạt động đổi mới sáng tạo trong doanh nghiệp",
+            "description": "Thủ tướng Chính phủ yêu cầu thực hiện quyết liệt mục tiêu phát triển doanh nghiệp nhỏ và vừa nhanh, bền vững, tăng trưởng về số lượng, chất lượng, quy mô, hiệu quả hoạt động và đóng góp quan trọng vào nền kinh tế. Phấn đấu từ nay đến năm 2030 có thêm ít nhất 1 triệu doanh nghiệp......"
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+  "featured": {
+    "image": "/IMAGE/image5.png",
+    "title": "Bộ Tài chính ban hành thông tư mới",
+    "desc": "Thông tư có hiệu lực từ năm 2025, nhiều điểm mới đáng chú ý."
+  },
+  "list": [
+    {
+      "time": "10:48",
+      "title": "Quy định mới trong chuyển giá"
+    },
+    {
+      "time": "17:19",
+      "title": "Thủ tục hành chính được sửa đổi"
+    },
+    {
+      "time": "17:01",
+      "title": "Hướng dẫn đầu tư mới ban hành"
+    }
+  ]
+}
