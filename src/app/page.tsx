@@ -21,8 +21,19 @@ export default function Home() {
 
       </div>
       <div className="my-4">
-        <img src="/IMAGE/ảnh-01 1.png" alt="" />
+        <img
+          src="/IMAGE/ảnh-01 1.png"
+          alt=""
+          style={{
+            width: "100%",      // ảnh co giãn theo chiều ngang
+            height: "auto",     // giữ tỉ lệ
+            display: "block",   // loại bỏ khoảng trắng dưới ảnh
+            borderRadius: "6px",// bo góc nếu muốn
+            maxWidth: "100%"    // đảm bảo không vượt container
+          }}
+        />
       </div>
+
       <div className="container my-4">
         <Icons />
 

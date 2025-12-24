@@ -1,146 +1,147 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 /* ===== INTERFACE ===== */
 interface IconItem {
-    icon: string;
-    title: string;
-    desc: string;
+    ten: string;
+    upload_file: string; // Directus sẽ trả về đường dẫn file
 }
 
-interface Featured {
-    image: string;
-    title: string;
-    desc: string;
+interface NewsItem {
+    noi_dung: string;
 }
 
-interface EventItem {
-    time: string;
-    title: string;
-}
-
-interface EventData {
-    featured: Featured;
-    list: EventItem[];
-}
-interface coquanData {
-    // Add your properties here
-    image: string;
-}
-
-interface coquanItem {
-    image: string;
-}
-/* ===== COMPONENT ===== */
-export default function IconExample() {
+export default function HoTroPhapLy() {
     const [icons, setIcons] = useState<IconItem[]>([]);
-    const [event, setEvent] = useState<EventData | null>(null);
-    const [coquan, setCoquan] = useState<coquanItem[]>([]);
+    const [news, setNews] = useState<NewsItem[]>([]);
+    const [ten, setTen] = useState("");
+    const [file, setFile] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
 
-    /* fetch icon */
+    const API_URL = "http://10.10.20.77:8057";
+    const API_TOKEN = "YOUR_API_TOKEN"; // Thay bằng token của bạn
+
+    /* Fetch danh sách hỗ trợ pháp lý */
+    const fetchIcons = async () => {
+        try {
+            const res = await fetch(
+                `${API_URL}/items/ho_tro_phap_ly?fields=upload_file,ten&limit=3`
+            );
+            if (!res.ok) throw new Error(`Error fetching icons: ${res.statusText}`);
+            const data = await res.json();
+            setIcons(data.data);
+        } catch (err: any) {
+            console.error(err);
+            alert("Có lỗi xảy ra khi lấy danh sách hỗ trợ pháp lý!");
+        }
+    };
+
+    /* Fetch tin tức */
+    const fetchNews = async () => {
+        try {
+            const res = await fetch(
+                `${API_URL}/items/tin_tuc?fields=noi_dung&limit=2`
+            );
+            if (!res.ok) throw new Error(`Error fetching news: ${res.statusText}`);
+            const data = await res.json();
+            setNews(data.data);
+        } catch (err: any) {
+            console.error(err);
+            alert("Có lỗi xảy ra khi lấy tin tức!");
+        }
+    };
+
     useEffect(() => {
-        fetch("/icon.json")
-            .then((res) => res.json())
-            .then((data: IconItem[]) => setIcons(data));
+        fetchIcons();
+        fetchNews();
     }, []);
 
-    /* fetch event */
-    useEffect(() => {
-        fetch("/event.json")
-            .then((res) => res.json())
-            .then((data: EventData) => setEvent(data));
-    }, []);
-    // Cơ quan
-    useEffect(() => {
-        fetch("/coquan.json")
-            .then((res) => res.json())
-            .then((data: coquanItem[]) => setCoquan(data));
-    }, []);
-    if (!event) return <p>Đang tải dữ liệu...</p>;
+    /* Upload file + tạo item hỗ trợ pháp lý */
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!ten || !file) {
+            alert("Vui lòng nhập tên và chọn file!");
+            return;
+        }
+        setLoading(true);
+        try {
+            // Upload file
+            const formData = new FormData();
+            formData.append("file", file);
+            const uploadRes = await fetch(`${API_URL}/files`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${API_TOKEN}` },
+                body: formData,
+            });
+            if (!uploadRes.ok) throw new Error("Upload file thất bại");
+            const uploadData = await uploadRes.json();
+            const fileId = uploadData.data.id;
+
+            // Tạo item
+            const createRes = await fetch(`${API_URL}/items/ho_tro_phap_ly`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${API_TOKEN}`,
+                },
+                body: JSON.stringify({ ten, upload_file: fileId }),
+            });
+            if (!createRes.ok) throw new Error("Tạo item thất bại");
+
+            await fetchIcons();
+            setTen("");
+            setFile(null);
+            alert("Thêm hỗ trợ pháp lý thành công!");
+        } catch (err: any) {
+            console.error(err);
+            alert(err.message || "Có lỗi xảy ra khi thêm hỗ trợ pháp lý!");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <>
-            <Row className="mt-4">
-                {/* LEFT */}
-                <Col md={5} sm={12}>
-                    <h4 className="text-primary fw-semibold mb-3">
-                        HỖ TRỢ PHÁP LÝ
-                    </h4>
+            <div className="row">
+                {/* Cột trái: hỗ trợ pháp lý */}
+                <div className="col-6">
+                    <Row className="g-3">
+                        {Array.from({ length: 3 }).flatMap(() =>
+                            icons.map((item) => (
+                                <Col key={item.ten + Math.random()} md={4} sm={6} xs={12}>
+                                    <div className="support-box bg-primary text-white text-center p-3 rounded h-100">
+                                        <img
+                                            src={item.upload_file}
+                                            alt={item.ten}
+                                            className="img-fluid mb-2"
+                                            style={{ maxHeight: 60 }}
+                                        />
+                                        <h6 className="fw-semibold mb-1">{item.ten}</h6>
+                                    </div>
+                                </Col>
+                            ))
+                        )}
+                    </Row>
+                </div>
 
-                    <div className="row g-3">
-                        {icons.map((item) => (
-                            <div className="col-4 " key={item.title}>
-                                <div className="support-box bg-primary text-white text-center p-3 rounded h-100">
-                                    <img
-                                        src={item.icon}
-                                        alt={item.title}
-                                        width={40}
-                                        height={40}
-                                        className="mb-2"
-                                    />
-                                    <h6 className="fw-semibold mb-1">{item.title}</h6>
-                                    <p className="small mb-0">{item.desc}</p>
+                {/* Cột phải: tin tức */}
+                <div className="col-6">
+                    <Row className="g-3">
+                        {news.map((item, index) => (
+                            <Col key={index} md={12}>
+                                <div className="news-box border p-3 rounded h-100">
+                                    <p className="small mb-0">{item.noi_dung}</p>
                                 </div>
-                            </div>
+                            </Col>
                         ))}
-                    </div>
-                </Col>
-
-                {/* RIGHT */}
-                <Col md={7} sm={12}>
-                    <h4 className="text-primary fw-semibold mb-2 mt-1">
-                        TIN TỨC & SỰ KIỆN
-                    </h4>
-                    {/* featured */}
-                    <div className="mb-3 row">
-                        <img
-                            src={event.featured.image}
-                            alt={event.featured.title}
-                            className="img-fluid rounded mb-2 col-6"
-                        />
-                        <div className="col-6">
-                            <h6 className="fw-semibold mb-1">
-                                {event.featured.title}
-                            </h6>
-                            <p className="small text-muted">
-                                {event.featured.desc}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    {/* list */}
-                    <ul className="list-unstyled">
-                        {event.list.map((item, index) => (
-                            <li
-                                key={index}
-                                className="d-flex gap-3 border-bottom py-2 small"
-                            >
-                                <span className="text-primary fw-semibold">
-                                    {item.time}:
-                                </span>
-                                <span>{item.title}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </Col>
-            </Row>
-            <div className="line mt-4 mb-2" style={{ height: '2px', backgroundColor: '#1097e6' }}></div>
-            <div className="row g-3">
-                {coquan.map((item, index) => (
-                    <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 ">
-                        <img src={item.image} alt="coquan" className="coquan-img " />
-                    </div>
-                ))}
-
+                    </Row>
+                </div>
             </div>
-            <div className="line mt-4 mb-2" style={{ height: '2px', backgroundColor: '#1097e6' }}></div>
-
-
         </>
     );
 }

@@ -7,7 +7,7 @@ export default function AppFooter() {
     return (
         <footer className="footer-section text-white pt-4 pb-3">
             <div className="container text-start">
-                <h4 className="fw-bold  mb-2">HỖ TRỢ PHÁP LÝ CHO DOANH NGHIỆP</h4>
+                <h1 className="fw-bold  mb-2">HỖ TRỢ PHÁP LÝ CHO DOANH NGHIỆP</h1>
                 <div className="row align-items-start g-0">
                     {/* Logo */}
                     <div className="col-auto mt-1">
