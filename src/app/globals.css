@@ -763,3 +763,48 @@ a {
     margin-left: calc(-50vw + 50%);
   }
 }
+
+
+/* Wrapper */
+.lien-ket-website {
+  width: 100%;
+}
+
+/* Box chứa logo */
+.lien-ket-website a {
+  background-color: #ffffff;
+  transition: all 0.25s ease;
+  border-color: #e5e7eb;
+}
+
+/* Hover hiệu ứng */
+.lien-ket-website a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  border-color: #0d6efd;
+  /* bootstrap primary */
+}
+
+/* Logo */
+.lien-ket-website img {
+  max-width: 100%;
+
+  transition: all 0.25s ease;
+}
+
+/* Hover logo có màu */
+.lien-ket-website a:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+/* Responsive nhỏ hơn */
+@media (max-width: 576px) {
+  .lien-ket-website a {
+    padding: 12px;
+  }
+
+  .lien-ket-website img {
+    max-height: 45px;
+  }
+}

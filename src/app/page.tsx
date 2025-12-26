@@ -4,6 +4,7 @@ import AppHeader from "@/app/components/appheader";
 import AppFooter from "@/app/components/appfooter";
 import FeaturedNews from "@/app/components/FeaturedNews";
 import Test from "@/app/components/alert";
+import LienKetWebsite from "./components/lien_ket_website";
 import Icons from "@/app/components/icon"
 import Table from "@/app/components/vbpl";
 
@@ -36,6 +37,9 @@ export default function Home() {
 
       <div className="container my-4">
         <Icons />
+        <div className="line mt-4 mb-2" style={{ height: '2px', backgroundColor: '#1097e6' }}></div>
+        <LienKetWebsite />
+        <div className="line mt-4 mb-2" style={{ height: '2px', backgroundColor: '#1097e6' }}></div>
 
       </div>
     </div>

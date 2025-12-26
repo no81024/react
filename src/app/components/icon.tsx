@@ -9,7 +9,14 @@ import Form from "react-bootstrap/Form";
 /* ===== INTERFACE ===== */
 interface IconItem {
     ten: string;
-    upload_file: string; // Directus sẽ trả về đường dẫn file
+    logo: string;
+    link: string;
+}
+
+interface MediaItem {
+    file: string;
+    mo_ta: string;
+    date_created: string;
 }
 
 interface NewsItem {
@@ -19,71 +26,68 @@ interface NewsItem {
 export default function HoTroPhapLy() {
     const [icons, setIcons] = useState<IconItem[]>([]);
     const [news, setNews] = useState<NewsItem[]>([]);
+    const [media, setMedia] = useState<MediaItem[]>([]);
     const [ten, setTen] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
 
     const API_URL = "http://10.10.20.77:8057";
-    const API_TOKEN = "YOUR_API_TOKEN"; // Thay bằng token của bạn
+    const API_TOKEN = "YOUR_API_TOKEN";
 
-    /* Fetch danh sách hỗ trợ pháp lý */
+    /* ===== FETCH ICON ===== */
     const fetchIcons = async () => {
         try {
             const res = await fetch(
-                `${API_URL}/items/ho_tro_phap_ly?fields=upload_file,ten&limit=3`
+                `${API_URL}/items/logo_link?fields=ten,logo,link`
             );
-            if (!res.ok) throw new Error(`Error fetching icons: ${res.statusText}`);
             const data = await res.json();
             setIcons(data.data);
-        } catch (err: any) {
+        } catch (err) {
             console.error(err);
-            alert("Có lỗi xảy ra khi lấy danh sách hỗ trợ pháp lý!");
         }
     };
 
-    /* Fetch tin tức */
-    const fetchNews = async () => {
+    /* ===== FETCH MEDIA ===== */
+    const fetchMedia = async () => {
         try {
             const res = await fetch(
-                `${API_URL}/items/tin_tuc?fields=noi_dung&limit=2`
+                `${API_URL}/items/thu_vien_media?fields=file,mo_ta,date_created&limit=2`
             );
-            if (!res.ok) throw new Error(`Error fetching news: ${res.statusText}`);
             const data = await res.json();
-            setNews(data.data);
-        } catch (err: any) {
+            setMedia(data.data);
+        } catch (err) {
             console.error(err);
-            alert("Có lỗi xảy ra khi lấy tin tức!");
         }
     };
 
     useEffect(() => {
         fetchIcons();
-        fetchNews();
+        fetchMedia();
     }, []);
 
-    /* Upload file + tạo item hỗ trợ pháp lý */
+    const getImageUrl = (fileId: string) =>
+        `${API_URL}/assets/${fileId}`;
+
+    /* ===== SUBMIT (GIỮ NGUYÊN) ===== */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!ten || !file) {
-            alert("Vui lòng nhập tên và chọn file!");
-            return;
-        }
+        if (!ten || !file) return;
+
         setLoading(true);
         try {
-            // Upload file
             const formData = new FormData();
             formData.append("file", file);
+
             const uploadRes = await fetch(`${API_URL}/files`, {
                 method: "POST",
                 headers: { Authorization: `Bearer ${API_TOKEN}` },
                 body: formData,
             });
-            if (!uploadRes.ok) throw new Error("Upload file thất bại");
+
             const uploadData = await uploadRes.json();
             const fileId = uploadData.data.id;
 
-            // Tạo item
-            const createRes = await fetch(`${API_URL}/items/ho_tro_phap_ly`, {
+            await fetch(`${API_URL}/items/ho_tro_phap_ly`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -91,57 +95,95 @@ export default function HoTroPhapLy() {
                 },
                 body: JSON.stringify({ ten, upload_file: fileId }),
             });
-            if (!createRes.ok) throw new Error("Tạo item thất bại");
 
-            await fetchIcons();
+            fetchIcons();
             setTen("");
             setFile(null);
-            alert("Thêm hỗ trợ pháp lý thành công!");
-        } catch (err: any) {
-            console.error(err);
-            alert(err.message || "Có lỗi xảy ra khi thêm hỗ trợ pháp lý!");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <>
-            <div className="row">
-                {/* Cột trái: hỗ trợ pháp lý */}
-                <div className="col-6">
+        <div className="container">
+            <Row className="g-4">
+                {/* ===== LEFT COLUMN ===== */}
+                <Col xs={12} md={6}>
+                    <h5 className="text-primary mb-3">HỖ TRỢ PHÁP LÝ</h5>
                     <Row className="g-3">
-                        {Array.from({ length: 3 }).flatMap(() =>
-                            icons.map((item) => (
-                                <Col key={item.ten + Math.random()} md={4} sm={6} xs={12}>
-                                    <div className="support-box bg-primary text-white text-center p-3 rounded h-100">
-                                        <img
-                                            src={item.upload_file}
-                                            alt={item.ten}
-                                            className="img-fluid mb-2"
-                                            style={{ maxHeight: 60 }}
-                                        />
-                                        <h6 className="fw-semibold mb-1">{item.ten}</h6>
+                        {icons.map((item, index) => (
+                            <Col key={index} xs={6} sm={4}>
+                                <a
+                                    href={item.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-decoration-none"
+                                >
+                                    <div className="support-box bg-primary text-white text-center p-3 h-100">
+                                        <div
+                                        >
+                                            <img
+                                                src={getImageUrl(item.logo)}
+                                                alt={item.ten}
+                                                style={{
+                                                    maxHeight: 50,
+                                                    objectFit: "contain",
+                                                }}
+                                            />
+                                        </div>
+                                        <h6 className="fw-semibold mb-0 small">
+                                            {item.ten}
+                                        </h6>
                                     </div>
-                                </Col>
-                            ))
-                        )}
+                                </a>
+                            </Col>
+                        ))}
                     </Row>
-                </div>
+                </Col>
 
-                {/* Cột phải: tin tức */}
-                <div className="col-6">
-                    <Row className="g-3">
-                        {news.map((item, index) => (
-                            <Col key={index} md={12}>
-                                <div className="news-box border p-3 rounded h-100">
-                                    <p className="small mb-0">{item.noi_dung}</p>
+                {/* ===== RIGHT COLUMN ===== */}
+                <Col xs={12} md={6}>
+                    <h5 className="text-primary mb-3">
+                        TIN TỨC & SỰ KIỆN
+                    </h5>
+                    <Row className="g-2">
+                        {media.map((item, index) => (
+                            <Col key={index} xs={12}>
+                                <div className="border p-3 h-100 d-flex gap-3">
+                                    <div
+                                        style={{
+                                            width: 80,
+                                            height: 80,
+                                            overflow: "hidden",
+                                            flexShrink: 0,
+                                        }}
+                                    >
+                                        <img
+                                            src={getImageUrl(item.file)}
+                                            alt={item.mo_ta}
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                                objectFit: "cover",
+                                            }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className="fw-semibold mb-1 small">
+                                            {item.mo_ta}
+                                        </p>
+                                        <small className="text-muted">
+                                            {new Date(
+                                                item.date_created
+                                            ).toLocaleDateString("vi-VN")}
+                                        </small>
+                                    </div>
                                 </div>
                             </Col>
                         ))}
                     </Row>
-                </div>
-            </div>
-        </>
+                </Col>
+            </Row>
+        </div>
     );
 }
